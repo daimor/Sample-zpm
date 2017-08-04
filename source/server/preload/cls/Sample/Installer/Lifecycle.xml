@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-07 11:25:34">
+<Class name="Sample.Lifecycle">
+<Super>%ZHSLIB.PackageManager.Developer.Lifecycle.Module</Super>
+<TimeChanged>64470,40201.2861</TimeChanged>
+<TimeCreated>64470,40073.613179</TimeCreated>
+
+<Method name="%Activate">
+<FormalSpec><![CDATA[&pParams]]></FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	Set tSC = $$$OK
+	Try {
+		Set tSC = ##super(.pParams)
+		If $$$ISERR(tSC) {
+			Quit
+		}
+		
+		Set tVerbose = $Get(pParams("Verbose"),0)
+		Write:tVerbose !,"Doing Sample.Utils : generate data..."
+		do ##class(Sample.Utils).Generate()
+		Write:tVerbose !,"Done."
+	} Catch e {
+		Set tSC = e.AsStatus()
+	}
+	Quit tSC
+]]></Implementation>
+</Method>
+</Class>
+</Export>

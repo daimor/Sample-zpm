@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
+<Class name="Sample.Vendor">
+<Description><![CDATA[
+The <class>Vendor</class> class is a persistent class 
+containing vendor information.<br>
+This class demonstrates how to use the <class>%CacheSQLStorage</class> storage 
+class to provide custom storage for a persistent class. Typically the 
+<class>%CacheSQLStorage</class> storage class is used to provide object access 
+to previously existing storage structures.]]></Description>
+<SqlRowIdName>Vendor</SqlRowIdName>
+<StorageStrategy>SQLStorage</StorageStrategy>
+<Super>%Persistent,%Populate,%XML.Adaptor</Super>
+<TimeChanged>64467,38954</TimeChanged>
+<TimeCreated>59269,38836.793</TimeCreated>
+
+<Index name="IndexNName">
+<Description>
+Name Index</Description>
+<Properties>Name</Properties>
+</Index>
+
+<UDLText name="T">
+<Content><![CDATA[
+// define properties for this class
+
+]]></Content>
+</UDLText>
+
+<Property name="Name">
+<Description>
+Vendor name.</Description>
+<Type>%String</Type>
+<Parameter name="POPSPEC" value="Company()"/>
+</Property>
+
+<Property name="Address">
+<Description>
+Vendor address.</Description>
+<Type>Address</Type>
+<Parameter name="POPSPEC" value="##class(Address).PopulateSerial()"/>
+</Property>
+
+<Property name="Contact">
+<Description>
+Name of primary vendor contact.</Description>
+<Type>%String</Type>
+<Parameter name="POPSPEC" value="Name()"/>
+</Property>
+
+<Property name="DiscRate">
+<Description>
+Discount rate.</Description>
+<Type>%Float</Type>
+<Parameter name="MAXVAL" value="100"/>
+<Parameter name="MINVAL" value="0"/>
+</Property>
+
+<Property name="DiscDays">
+<Description>
+Discount days.</Description>
+<Type>%Integer</Type>
+<Parameter name="MAXVAL" value="999"/>
+<Parameter name="MINVAL" value="0"/>
+</Property>
+
+<Property name="NetDays">
+<Description>
+Net days.</Description>
+<Type>%Integer</Type>
+<Parameter name="MAXVAL" value="999"/>
+<Parameter name="MINVAL" value="0"/>
+</Property>
+
+<Property name="DaysClear">
+<Description>
+Days clear.</Description>
+<Type>%Integer</Type>
+<Parameter name="MAXVAL" value="999"/>
+<Parameter name="MINVAL" value="0"/>
+</Property>
+
+<Property name="PayFlag">
+<Description>
+Payment Flag</Description>
+<Type>%String</Type>
+<Parameter name="DISPLAYLIST" value=",Never,Minimum"/>
+<Parameter name="VALUELIST" value=",N,M"/>
+</Property>
+
+<Property name="MinPayment">
+<Description>
+Minimum Payment.</Description>
+<Type>%Float</Type>
+<Parameter name="MAXVAL" value="999999"/>
+<Parameter name="MINVAL" value="0"/>
+</Property>
+
+<Property name="LastInvDate">
+<Description>
+Last Invoice Date.</Description>
+<Type>%Date</Type>
+<Parameter name="MAXVAL"/>
+<Parameter name="MINVAL"/>
+</Property>
+
+<Property name="LastPayDate">
+<Description>
+Last Payment Date.</Description>
+<Type>%Date</Type>
+<Parameter name="MAXVAL"/>
+<Parameter name="MINVAL"/>
+</Property>
+
+<Property name="Balance">
+<Description>
+Balance.</Description>
+<Type>%Float</Type>
+<Parameter name="MAXVAL" value="999999999"/>
+<Parameter name="MINVAL" value="-999999999"/>
+</Property>
+
+<Property name="TaxReporting">
+<Description>
+Vendor tax reporting status.</Description>
+<Type>%String</Type>
+<Parameter name="DISPLAYLIST" value=",Exempt,Required"/>
+<Parameter name="VALUELIST" value=",E,"/>
+</Property>
+
+<Storage name="SQLStorage">
+<Type>%CacheSQLStorage</Type>
+<SqlIdExpression>$i(^VendorData)</SqlIdExpression>
+<StreamLocation>^Sample.VendorS</StreamLocation>
+<ExtentSize>100</ExtentSize>
+<Property name="%%ID">
+<Selectivity>1</Selectivity>
+<AverageFieldSize>1.92</AverageFieldSize>
+</Property>
+<Property name="Address">
+<Selectivity>1.0000%,City:4.0000%,State:2.3256%,Street:1.0000%,Zip:1.0000%</Selectivity>
+<AverageFieldSize>35.64,City:6.93,State:2,Street:16.37,Zip:5</AverageFieldSize>
+</Property>
+<Property name="Balance">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>9.36</AverageFieldSize>
+</Property>
+<Property name="Contact">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>15.75</AverageFieldSize>
+</Property>
+<Property name="DaysClear">
+<Selectivity>1.0204%</Selectivity>
+<AverageFieldSize>2.83</AverageFieldSize>
+</Property>
+<Property name="DiscDays">
+<Selectivity>1.0989%</Selectivity>
+<AverageFieldSize>2.89</AverageFieldSize>
+</Property>
+<Property name="DiscRate">
+<Selectivity>1.5873%</Selectivity>
+<AverageFieldSize>1.94</AverageFieldSize>
+</Property>
+<Property name="LastInvDate">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>5</AverageFieldSize>
+</Property>
+<Property name="LastPayDate">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>5</AverageFieldSize>
+</Property>
+<Property name="MinPayment">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>5.84</AverageFieldSize>
+</Property>
+<Property name="Name">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>16.98</AverageFieldSize>
+</Property>
+<Property name="NetDays">
+<Selectivity>1.0753%</Selectivity>
+<AverageFieldSize>2.93</AverageFieldSize>
+</Property>
+<Property name="PayFlag">
+<Selectivity>50.0000%</Selectivity>
+<AverageFieldSize>1</AverageFieldSize>
+</Property>
+<Property name="TaxReporting">
+<Selectivity>50.0000%</Selectivity>
+<AverageFieldSize>.54</AverageFieldSize>
+</Property>
+<SQLMap name="DataMasterMap">
+<Type>data</Type>
+<Global>^VendorData</Global>
+<Structure>list</Structure>
+<BlockCount>-8</BlockCount>
+<Subscript name="1">
+<Expression>{Vendor}</Expression>
+</Subscript>
+<Data name="Address">
+<Piece>2</Piece>
+</Data>
+<Data name="Balance">
+<Node>1</Node>
+<Piece>3</Piece>
+</Data>
+<Data name="Contact">
+<Piece>3</Piece>
+</Data>
+<Data name="DaysClear">
+<Piece>7</Piece>
+</Data>
+<Data name="DiscDays">
+<Piece>5</Piece>
+</Data>
+<Data name="DiscRate">
+<Piece>4</Piece>
+</Data>
+<Data name="LastInvDate">
+<Node>1</Node>
+<Piece>1</Piece>
+</Data>
+<Data name="LastPayDate">
+<Node>1</Node>
+<Piece>2</Piece>
+</Data>
+<Data name="MinPayment">
+<Piece>9</Piece>
+</Data>
+<Data name="Name">
+<Piece>1</Piece>
+</Data>
+<Data name="NetDays">
+<Piece>6</Piece>
+</Data>
+<Data name="PayFlag">
+<Piece>8</Piece>
+</Data>
+<Data name="TaxReporting">
+<Piece>10</Piece>
+</Data>
+</SQLMap>
+<SQLMap name="IndexNName">
+<Type>index</Type>
+<Global>^VendorIndex</Global>
+<Structure>list</Structure>
+<BlockCount>-4</BlockCount>
+<Subscript name="1">
+<Expression>"N"</Expression>
+</Subscript>
+<Subscript name="2">
+<Expression>$$SQLUPPER({Name})</Expression>
+</Subscript>
+<Subscript name="3">
+<Expression>{Vendor}</Expression>
+</Subscript>
+</SQLMap>
+</Storage>
+</Class>
+</Export>

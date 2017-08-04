@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
+<Class name="Sample.PersonIdentification">
+<Description>
+This sample registered object represent the identification information for a person.  
+This class is used to illustrate return a list of objects using XML.</Description>
+<Super>%RegisteredObject,%XML.Adaptor</Super>
+<TimeChanged>64441,73928</TimeChanged>
+<TimeCreated>59493,42563.512805</TimeCreated>
+
+<Property name="ID">
+<Description>
+Id of Person record in the database.</Description>
+<Type>%String</Type>
+</Property>
+
+<Property name="Name">
+<Description>
+Person's name.</Description>
+<Type>%String</Type>
+<Required>1</Required>
+</Property>
+
+<Property name="SSN">
+<Description>
+Person's Social Security number. This is validated using pattern match.</Description>
+<Type>%String</Type>
+<Required>1</Required>
+<Parameter name="PATTERN" value="3N1&quot;-&quot;2N1&quot;-&quot;4N"/>
+</Property>
+
+<Property name="DOB">
+<Description>
+Person's Date of Birth.</Description>
+<Type>%Date</Type>
+</Property>
+</Class>
+</Export>

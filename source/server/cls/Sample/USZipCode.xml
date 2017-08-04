@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
+<Class name="Sample.USZipCode">
+<Description>
+This class represents a U.S. ZIP (Zone Improvement Plan) 
+Code and corresponding State and City name. The sample dataset
+includes values for the northeastern United States.</Description>
+<Final>1</Final>
+<Super>%Persistent,%XML.Adaptor</Super>
+<TimeChanged>64441,73928</TimeChanged>
+<TimeCreated>59269,38836.844</TimeCreated>
+
+<Index name="ZipIDX">
+<Description>
+This index specifies that objects are identified by the ZipCode property.</Description>
+<IdKey>1</IdKey>
+<Properties>ZipCode</Properties>
+</Index>
+
+<Property name="ZipCode">
+<Description>
+The 5-digit ZIP Code value.</Description>
+<Type>%String</Type>
+<Required>1</Required>
+<Parameter name="MAXLEN" value="5"/>
+</Property>
+
+<Property name="State">
+<Description>
+A 2 letter state abbreviation.</Description>
+<Type>%String</Type>
+<Required>1</Required>
+<Parameter name="MAXLEN" value="2"/>
+</Property>
+
+<Property name="City">
+<Description>
+A city name.</Description>
+<Type>%String</Type>
+<Required>1</Required>
+<Parameter name="MAXLEN" value="50"/>
+</Property>
+
+<Property name="Longitude">
+<Type>%Numeric</Type>
+<Parameter name="SCALE" value="6"/>
+</Property>
+
+<Property name="Latitude">
+<Type>%Numeric</Type>
+<Parameter name="SCALE" value="6"/>
+</Property>
+
+<Storage name="Default">
+<Type>%CacheStorage</Type>
+<DataLocation>^ZipCodeData</DataLocation>
+<DefaultData>Data</DefaultData>
+<IdLocation>^ZipCodeData</IdLocation>
+<IndexLocation>^ZipCodeDataIdx</IndexLocation>
+<StreamLocation>^Sample.USZipCodeS</StreamLocation>
+<Data name="Data">
+<Value name="1">
+<Value>State</Value>
+</Value>
+<Value name="2">
+<Value>City</Value>
+</Value>
+<Value name="3">
+<Value>Longitude</Value>
+</Value>
+<Value name="4">
+<Value>Latitude</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+</Export>

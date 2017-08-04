@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
+<Class name="Sample.Employee">
+<Description><![CDATA[
+This sample persistent class represents an employee.<br>]]></Description>
+<Super>Person</Super>
+<TimeChanged>64467,38954</TimeChanged>
+<TimeCreated>59269,38836.422</TimeCreated>
+
+<Property name="Title">
+<Description>
+The employee's job title.</Description>
+<Type>%String</Type>
+<Parameter name="MAXLEN" value="50"/>
+<Parameter name="POPSPEC" value="Title()"/>
+</Property>
+
+<Property name="Salary">
+<Description>
+The employee's current salary.</Description>
+<Type>%Integer</Type>
+<Parameter name="MAXVAL" value="100000"/>
+<Parameter name="MINVAL" value="0"/>
+</Property>
+
+<Property name="Notes">
+<Description>
+A character stream containing notes about this employee.</Description>
+<Type>%Stream.GlobalCharacter</Type>
+</Property>
+
+<Property name="Picture">
+<Description>
+A picture of the employee</Description>
+<Type>%Stream.GlobalBinary</Type>
+</Property>
+
+<Property name="Company">
+<Description>
+The company this employee works for.</Description>
+<Type>Company</Type>
+<Cardinality>one</Cardinality>
+<Inverse>Employees</Inverse>
+<Relationship>1</Relationship>
+</Property>
+
+<Method name="PrintPerson">
+<Description><![CDATA[
+This method overrides the method in <class>Person</class>.<br>
+Prints the properties <property>Name</property> and <property>Title</property> 
+to the console.]]></Description>
+<Implementation><![CDATA[
+	Write !,"Name: ", ..Name, ?30, "Title: ", ..Title
+	Quit
+]]></Implementation>
+</Method>
+
+<Method name="WritePicture">
+<Description>
+writes a .png file containing the picture, if any, of this employee
+the purpose of this method is to prove that Picture really contains an image</Description>
+<Implementation><![CDATA[
+	if (..Picture="") {quit}
+	set name=$TR(..Name,".") ; strip off trailing period
+	set name=$TR(name,", ","__") ; replace commas and spaces
+	set filename=name_".png"
+	
+	set file=##class(%Stream.FileBinary).%New()
+	set file.Filename=filename
+	do file.CopyFrom(..Picture)
+	do file.%Save()
+	write !, "Generated file: "_filename
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+<DefaultData>EmployeeDefaultData</DefaultData>
+<ExtentSize>100</ExtentSize>
+<Data name="EmployeeDefaultData">
+<Structure>listnode</Structure>
+<Subscript>"Employee"</Subscript>
+<Value name="1">
+<Value>Company</Value>
+</Value>
+<Value name="2">
+<Value>Notes</Value>
+</Value>
+<Value name="3">
+<Value>Salary</Value>
+</Value>
+<Value name="4">
+<Value>Title</Value>
+</Value>
+<Value name="5">
+<Value>Picture</Value>
+</Value>
+</Data>
+<Property name="%%CLASSNAME">
+<Selectivity>100.0000%</Selectivity>
+<AverageFieldSize>17</AverageFieldSize>
+</Property>
+<Property name="%%ID">
+<Selectivity>1</Selectivity>
+<AverageFieldSize>3</AverageFieldSize>
+</Property>
+<Property name="Age">
+<Selectivity>1.6129%</Selectivity>
+<AverageFieldSize>1.89</AverageFieldSize>
+</Property>
+<Property name="Company">
+<Selectivity>5.0000%</Selectivity>
+<AverageFieldSize>1.58</AverageFieldSize>
+</Property>
+<Property name="DOB">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>5</AverageFieldSize>
+</Property>
+<Property name="FavoriteColors">
+<Selectivity>2.0000%</Selectivity>
+<OutlierSelectivity>.3:</OutlierSelectivity>
+<AverageFieldSize>7.24</AverageFieldSize>
+</Property>
+<Property name="Home">
+<Selectivity>1.0000%,City:3.8462%,State:2.3810%,Street:1.0000%,Zip:1.0000%</Selectivity>
+<AverageFieldSize>35.72,City:7.17,State:2,Street:16.21,Zip:5</AverageFieldSize>
+</Property>
+<Property name="Name">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>16.26</AverageFieldSize>
+</Property>
+<Property name="Notes">
+<Selectivity>100.0000%</Selectivity>
+</Property>
+<Property name="Office">
+<Selectivity>1.0000%,City:3.8462%,State:2.2727%,Street:1.0000%,Zip:1.0000%</Selectivity>
+<AverageFieldSize>36.58,City:7.44,State:2,Street:16.77,Zip:5</AverageFieldSize>
+</Property>
+<Property name="Picture">
+<Selectivity>100.0000%</Selectivity>
+</Property>
+<Property name="SSN">
+<Selectivity>1</Selectivity>
+<AverageFieldSize>11</AverageFieldSize>
+</Property>
+<Property name="Salary">
+<Selectivity>1.0000%</Selectivity>
+<AverageFieldSize>4.87</AverageFieldSize>
+</Property>
+<Property name="Spouse">
+<Selectivity>1.5873%</Selectivity>
+<AverageFieldSize>1.95</AverageFieldSize>
+</Property>
+<Property name="Title">
+<Selectivity>1.4085%</Selectivity>
+<AverageFieldSize>20.13</AverageFieldSize>
+</Property>
+<SQLMap name="$Employee">
+<BlockCount>-4</BlockCount>
+</SQLMap>
+</Storage>
+</Class>
+</Export>
