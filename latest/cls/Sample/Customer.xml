@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
+<Class name="Sample.Customer">
+<Super>%SerialObject</Super>
+<TimeChanged>64441,73928</TimeChanged>
+<TimeCreated>59855,70764.188023</TimeCreated>
+
+<Property name="Name">
+<Type>%String</Type>
+<Parameter name="TRUNCATE" value="1"/>
+</Property>
+
+<Property name="MailingAddresses">
+<Type>Address</Type>
+<Collection>list</Collection>
+<Parameter name="JAVATYPE" value="java.util.List"/>
+</Property>
+
+<Property name="Addresses">
+<Type>Address</Type>
+<Collection>array</Collection>
+<Parameter name="JAVATYPE" value="java.util.Map"/>
+</Property>
+
+<Property name="MyAddress">
+<Type>Address</Type>
+</Property>
+
+<Property name="Status">
+<Type>%String</Type>
+<Parameter name="TRUNCATE" value="1"/>
+</Property>
+
+<Property name="TS">
+<Type>%TimeStamp</Type>
+</Property>
+
+<Method name="%OnNew">
+<Description><![CDATA[
+This callback method is invoked by the <METHOD>%New</METHOD> method to 
+provide notification that a new instance of an object is being created.
+
+<P>If this method returns an error then the object will not be created.]]></Description>
+<FormalSpec>initvalue:%CacheString</FormalSpec>
+<Private>1</Private>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	Do ..SetDefault()
+	Quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="SetDefault">
+<Implementation><![CDATA[
+	Do ..MailingAddresses.Clear()
+	Do ..Addresses.Clear()
+	
+	Set l = $listbuild("One Memorial Dr.","Cambridge","MA","02142")
+	Set l1 = $listbuild(l,"Sample.Address")
+	Set a = ##class(Sample.Address).%Open(l1)
+	Do ..MailingAddresses.Insert(a)
+	
+	Set l = $listbuild("768 Beacon St.","Brookline","MA","02446")
+	Set l1 = $listbuild(l,"Sample.Address")
+	Set a = ##class(Sample.Address).%Open(l1)
+	Do ..MailingAddresses.Insert(a)
+	
+	Set l = $listbuild("825 Third Ave.","New York","NY","10022")
+	Set l1 = $listbuild(l,"Sample.Address")
+	Set a = ##class(Sample.Address).%Open(l1)
+	Do ..Addresses.SetAt(a, "Residence")
+	
+	Set l = $listbuild("7722 Main St.","Detroit","MI","48224")
+	Set l1 = $listbuild(l,"Sample.Address")
+	Set a = ##class(Sample.Address).%Open(l1)
+	Do ..Addresses.SetAt(a, "Business")
+	
+	Set l = $listbuild("25 Glen Ave","Newton","MA","02459")
+	Set l1 = $listbuild(l,"Sample.Address")
+	Set a = ##class(Sample.Address).%Open(l1)
+	
+	Set ..MyAddress = a
+	Set ..Name = "Joe Doe, Jr."
+	Set ..Status = "Prospect"
+]]></Implementation>
+</Method>
+
+<Method name="ToStringWrapper">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>Arg1:%Binary</FormalSpec>
+<ReturnType>%String</ReturnType>
+<SqlProc>1</SqlProc>
+<Implementation><![CDATA[
+	Set customer = ##class(Sample.Customer).%Open(Arg1)
+	Quit ..ToString(customer)
+]]></Implementation>
+</Method>
+
+<Method name="ToString">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>customer:%IStruct</FormalSpec>
+<ReturnType>%String</ReturnType>
+<SqlProc>1</SqlProc>
+<Implementation><![CDATA[
+	Quit:customer="" "{}"
+	Set l = customer.MailingAddresses
+	Set m = customer.Addresses
+	Set str = customer.Name_"Addresses: "_m.Count()_": "
+	
+	Set key = ""
+	For  {
+		Set addr = m.GetNext(.key)
+		Quit:key=""
+		Set str = str_"<"_key_">"
+		Do ..writeAddr(.str, addr)
+	}
+
+	Set str = str_"Mailing: "_l.Count()_": "
+	For i=1:1:l.Count() {
+		Set addr = l.GetAt(i)
+		Do ..writeAddr(.str, addr)
+	}
+	Set str = str_"; "_customer.Status
+	
+	Set str = str_". My Address: "
+	Do ..writeAddr(.str,customer.MyAddress)
+	
+	Quit str
+]]></Implementation>
+</Method>
+
+<Method name="writeAddr">
+<ClassMethod>1</ClassMethod>
+<FormalSpec><![CDATA[&str:%String,addr:Address]]></FormalSpec>
+<Implementation><![CDATA[
+	Set str =str_"{"
+	Set str = str_"Street: "_addr.Street
+	Set str = str_"; City: "_addr.City
+	Set str = str_"; State: "_addr.State
+	Set str = str_"; Zip:  "_addr.Zip
+	Set str =str_"}  "
+	Quit
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheSerialState</Type>
+<State>CustomerState</State>
+<StreamLocation>^Sample.CustomerS</StreamLocation>
+<Data name="CustomerState">
+<Structure>listnode</Structure>
+<Subscript/>
+<Value name="1">
+<Value>Addresses</Value>
+</Value>
+<Value name="2">
+<Value>MailingAddresses</Value>
+</Value>
+<Value name="3">
+<Value>MyAddress</Value>
+</Value>
+<Value name="4">
+<Value>Name</Value>
+</Value>
+<Value name="5">
+<Value>Status</Value>
+</Value>
+<Value name="6">
+<Value>TS</Value>
+</Value>
+</Data>
+</Storage>
+</Class>
+</Export>

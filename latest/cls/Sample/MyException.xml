@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
+<Class name="Sample.MyException">
+<Description>
+This class is used by the example code in the THROW documentation</Description>
+<Super>%Exception.AbstractException</Super>
+<TimeChanged>64441,73928</TimeChanged>
+<TimeCreated>60933,64088.102</TimeCreated>
+</Class>
+</Export>
