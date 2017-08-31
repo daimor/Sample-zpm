@@ -1,71 +1,58 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
-<Class name="Sample.Task">
-<Description><![CDATA[
-Task definition is divided into two sections
-		- The task schedule; when it will run
-		- The task class; what it will do when it is running
+/// Task definition is divided into two sections
+/// 		- The task schedule; when it will run
+/// 		- The task class; what it will do when it is running
+/// 
+/// Generally tasks should be scheduled using the system management portal.
+/// If you need to schedule tasks programatically you can find examples at the bottom of this class.
+/// 
+/// A series of task classes are defined to demonstrate potential usage
+/// For these examples we rely on the MailServer being set 
+/// 	System Management Portal [Home]> [Configuration] > [Task Manager Settings] > [E-Mail Settings] 
+/// 		The SMTP server must be defined, also any authorization which is required for the mail server
+/// Sample.Task
+/// 		Demonstrate what happens when a task encounters a runtime error
+/// 
+/// Sample.TaskExample1
+/// 		Demonstrates a task which fails every other time it executes
+/// Sample.TaskExample2
+/// 		Using output files
+/// Sample.TaskExample3
+/// 		Demonstrates how to look for problems with your tasks (not running)
+/// 
+/// 
+/// Edit this class and change the who@somecompany.com to your email address 
+/// 
+Class Sample.Task Extends %SYS.Task.Definition
+{
 
-Generally tasks should be scheduled using the system management portal.
-If you need to schedule tasks programatically you can find examples at the bottom of this class.
+/// Property to keep track of how many times this task has run
+Property RunCount As %String;
 
-A series of task classes are defined to demonstrate potential usage
-For these examples we rely on the MailServer being set 
-	System Management Portal [Home]> [Configuration] > [Task Manager Settings] > [E-Mail Settings] 
-		The SMTP server must be defined, also any authorization which is required for the mail server
-Sample.Task
-		Demonstrate what happens when a task encounters a runtime error
-
-Sample.TaskExample1
-		Demonstrates a task which fails every other time it executes
-Sample.TaskExample2
-		Using output files
-Sample.TaskExample3
-		Demonstrates how to look for problems with your tasks (not running)
-
-
-Edit this class and change the who@somecompany.com to your email address 
-]]></Description>
-<Super>%SYS.Task.Definition</Super>
-<TimeChanged>64441,73928</TimeChanged>
-<TimeCreated>60768,42872.455937</TimeCreated>
-
-<Property name="RunCount">
-<Description>
-Property to keep track of how many times this task has run</Description>
-<Type>%String</Type>
-</Property>
-
-<Method name="OnTask">
-<Description>
-Demonstrate what happens when a task encounters a runtime error
-The first time the task runs, it will succeed
-The second time the task runs
-	The task will be marked as suspended
-The third time the task runs
-	The task will be marked as suspended
-		An error will be generated in the system error trap 
-Trapping errors using %ETN is already performed, therefore you should NOT set $ETRAP="^%ETN" ($ZT) this
-will cause the process to Halt and not clean up properly
-Never end the method by using HALT as this will cause the same problem as using ^%ETN
-This does not mean that you can't trap and handle your errors.  See the AlternativeOnTask method 
-which demonstrates how you can handle expected problems</Description>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// Demonstrate what happens when a task encounters a runtime error
+/// The first time the task runs, it will succeed
+/// The second time the task runs
+/// 	The task will be marked as suspended
+/// The third time the task runs
+/// 	The task will be marked as suspended
+/// 		An error will be generated in the system error trap 
+/// Trapping errors using %ETN is already performed, therefore you should NOT set $ETRAP="^%ETN" ($ZT) this
+/// will cause the process to Halt and not clean up properly
+/// Never end the method by using HALT as this will cause the same problem as using ^%ETN
+/// This does not mean that you can't trap and handle your errors.  See the AlternativeOnTask method 
+/// which demonstrates how you can handle expected problems
+Method OnTask() As %Status
+{
 	Set ..RunCount=..RunCount+1
 	If '(..RunCount#2) Quit $$$ERROR($$$GeneralError,"My task failed")
 	If '(..RunCount#3) Write 1/0
 	/// Returning a status other than OK will mark the task as Suspended
 	Quit $$$OK
-]]></Implementation>
-</Method>
+}
 
-<Method name="AlternativeOnTask">
-<Description>
-Assuming that you want to handle an error it is safe do the following
-it is just unsafe to Set $ZT="^%ETN" as this ends with a Halt</Description>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// Assuming that you want to handle an error it is safe do the following
+/// it is just unsafe to Set $ZT="^%ETN" as this ends with a Halt
+Method AlternativeOnTask() As %Status
+{
 	Set $ZT="Error"
 	Set ..RunCount=..RunCount+1
 	If '(..RunCount#2) Quit $$$ERROR($$$GeneralError,"My task failed")
@@ -77,18 +64,14 @@ Error	///
 	Set $ZT=""
 	/// Maybe handle the error and quit $$$OK or just return the error
 	Quit $$$ERROR($$$CacheError,$ZE)
-]]></Implementation>
-</Method>
+}
 
-<Method name="ScheduleOnceDaily">
-<Description>
-this will schedule a task to run Once every day at 10:30 am
-this example does not take into account any task 'Settings'
-In this example, if the task has not run within 18 hours and 30 minutes of the scheduled start it will
-"Expire" and not run again until the next start time</Description>
-<ClassMethod>1</ClassMethod>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// this will schedule a task to run Once every day at 10:30 am
+/// this example does not take into account any task 'Settings'
+/// In this example, if the task has not run within 18 hours and 30 minutes of the scheduled start it will
+/// "Expire" and not run again until the next start time
+ClassMethod ScheduleOnceDaily() As %Status
+{
 	#dim task as %SYS.Task
 	Set task=##Class(%SYS.Task).%New()
 	Set task.Name=..%ClassName(1)
@@ -102,19 +85,15 @@ In this example, if the task has not run within 18 hours and 30 minutes of the s
 	Do task.EmailOnError.Insert("who@somecompany.com")
 	/// also available EmailOnCompletion and EmailOnExpiration
 	Quit task.%Save()
-]]></Implementation>
-</Method>
+}
 
-<Method name="ScheduleHourly">
-<Description>
-Example code to demonstrate programatically scheduling a task to run EveryHour between 9am - 5pm
-In this example Expires=0 and therefore the task will run every time it is scheduled, this is useful
-for cases where reports need to be generated based on a certain time, the report needs to be run
-after the time has passed, it can't be skipped.  In this case you would probably use ..%RunDate 
-and ..%RunTime in the OnTask method</Description>
-<ClassMethod>1</ClassMethod>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// Example code to demonstrate programatically scheduling a task to run EveryHour between 9am - 5pm
+/// In this example Expires=0 and therefore the task will run every time it is scheduled, this is useful
+/// for cases where reports need to be generated based on a certain time, the report needs to be run
+/// after the time has passed, it can't be skipped.  In this case you would probably use ..%RunDate 
+/// and ..%RunTime in the OnTask method
+ClassMethod ScheduleHourly() As %Status
+{
 	#dim task as %SYS.Task
 	Set task=##Class(%SYS.Task).%New()
 	Set task.Name=..%ClassName(1)
@@ -129,17 +108,13 @@ and ..%RunTime in the OnTask method</Description>
 	Do task.EmailOnError.Insert("who@somecompany.com")
 	/// also available EmailOnCompletion and EmailOnExpiration
 	Quit task.%Save()
-]]></Implementation>
-</Method>
+}
 
-<Method name="ScheduleWeekly">
-<Description>
-Schedule task to run weekly at 3:00 am on Wednesday between January 31, 2014 and February 15, 2014
-In this example, if the task has not run within 5 days of the scheduled start it will
-"Expire" and not run again until the next start time</Description>
-<ClassMethod>1</ClassMethod>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// Schedule task to run weekly at 3:00 am on Wednesday between January 31, 2014 and February 15, 2014
+/// In this example, if the task has not run within 5 days of the scheduled start it will
+/// "Expire" and not run again until the next start time
+ClassMethod ScheduleWeekly() As %Status
+{
 	#dim task as %SYS.Task
 	Set task=##Class(%SYS.Task).%New()
 	Set task.Name=..%ClassName(1)  // The name to display in the utilities
@@ -157,15 +132,11 @@ In this example, if the task has not run within 5 days of the scheduled start it
 	Do task.EmailOnError.Insert("who@somecompany.com")
 	/// also available EmailOnCompletion and EmailOnExpiration
 	Quit task.%Save()
-]]></Implementation>
-</Method>
+}
 
-<Method name="ScheduleMonthly">
-<Description>
-Schedule task to run monthly on the first Monday at 5:00 am </Description>
-<ClassMethod>1</ClassMethod>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// Schedule task to run monthly on the first Monday at 5:00 am 
+ClassMethod ScheduleMonthly() As %Status
+{
 	#dim task as %SYS.Task
 	Set task=##Class(%SYS.Task).%New()
 	Set task.Name=..%ClassName(1)  // The name to display in the utilities
@@ -200,17 +171,13 @@ Schedule task to run monthly on the first Monday at 5:00 am </Description>
 		Run the first Sunday of every month
 		TimePeriod=task.TimePeriodDisplayToLogical("Monthly Special"),TimePeriodEvery=1,TimePeriodDay=1^1
 	*/
-]]></Implementation>
-</Method>
+}
 
-<Method name="ScheduleAfterAnother">
-<Description>
-this will schedule a task to run after another task has completed
-since JournalSwitch happens on all systems we will use that as our trigger task
-but any task could easily be substituted</Description>
-<ClassMethod>1</ClassMethod>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// this will schedule a task to run after another task has completed
+/// since JournalSwitch happens on all systems we will use that as our trigger task
+/// but any task could easily be substituted
+ClassMethod ScheduleAfterAnother() As %Status
+{
 	#dim task as %SYS.Task
 	Set taskID = 1  // we would normally use ##class(%SYS.Task).FindId(Name) but we know the ID
 	Set taskGUID = ##Class(%SYS.Task).JobGUIDGetStored(taskID)
@@ -228,22 +195,17 @@ but any task could easily be substituted</Description>
 	Do task.EmailOnError.Insert("who@somecompany.com")
 	/// also available EmailOnCompletion and EmailOnExpiration
 	Quit task.%Save()
-]]></Implementation>
-</Method>
+}
 
-<Method name="SuspendAndResumeTask">
-<Description>
-example programatically suspending and then resuming a task</Description>
-<ClassMethod>1</ClassMethod>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// example programatically suspending and then resuming a task
+ClassMethod SuspendAndResumeTask() As %Status
+{
 	Set taskID=##Class(%SYS.Task).FindId("Sample.Task")
 	If 'taskID Quit $$$ERROR($$$GeneralError,"Can't find the task specified")
 	Set Status=##Class(%SYS.Task).Suspend(taskID,2)  // suspend the task but reschedule 
 	Quit:'Status Status // We failed to suspend it for some reason, potentially it is running
 	Else  Set Status=##Class(%SYS.Task).Resume(taskID) /// resume the task
 	Quit Status
-]]></Implementation>
-</Method>
-</Class>
-</Export>
+}
+
+}

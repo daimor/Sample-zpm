@@ -1,19 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
-<Class name="Sample.Utils">
-<Description>
-This class contains a method to generate data for Sample package</Description>
-<Super>%RegisteredObject</Super>
-<TimeChanged>64441,73928</TimeChanged>
-<TimeCreated>61895,40724</TimeCreated>
+/// This class contains a method to generate data for Sample package
+Class Sample.Utils Extends %RegisteredObject
+{
 
-<Method name="Generate">
-<Description>
-Invoke this method to set up the data for these classes.
-Create one company for every five people.</Description>
-<ClassMethod>1</ClassMethod>
-<FormalSpec>personCount:%Integer=100</FormalSpec>
-<Implementation><![CDATA[
+/// Invoke this method to set up the data for these classes.
+/// Create one company for every five people.
+ClassMethod Generate(personCount As %Integer = 100)
+{
     //make sure we always have at least 1 person
     If (personCount < 1) {
         Set personCount=1
@@ -53,7 +45,6 @@ Create one company for every five people.</Description>
 		
 		do employee.%Save()
 		}
-]]></Implementation>
-</Method>
-</Class>
-</Export>
+}
+
+}

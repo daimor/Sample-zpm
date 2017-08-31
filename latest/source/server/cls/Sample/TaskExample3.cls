@@ -1,35 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2 (Build 691U)" ts="2017-07-05 11:47:55">
-<Class name="Sample.TaskExample3">
-<Description>
-Find any tasks which should be running but have not
+/// Find any tasks which should be running but have not
+/// 
+/// Edit this class and change the who@somecompany.com to your email address and update the smtp server
+/// in the SendMail method before scheduling
+Class Sample.TaskExample3 Extends Sample.Task
+{
 
-Edit this class and change the who@somecompany.com to your email address and update the smtp server
-in the SendMail method before scheduling</Description>
-<Super>Sample.Task</Super>
-<TimeChanged>64441,73928</TimeChanged>
-<TimeCreated>60831,39475.322178</TimeCreated>
+/// list of email addresses ; delimited to notify 
+Property Notify As %String(MAXLEN = "");
 
-<Property name="Notify">
-<Description>
-list of email addresses ; delimited to notify </Description>
-<Type>%String</Type>
-<Parameter name="MAXLEN"/>
-</Property>
+/// HealthCheck if set to 1 - Will notify that all jobs are completing successfully
+Property NotifyOnOK As %Boolean [ InitialExpression = 0 ];
 
-<Property name="NotifyOnOK">
-<Description>
-HealthCheck if set to 1 - Will notify that all jobs are completing successfully</Description>
-<Type>%Boolean</Type>
-<InitialExpression>0</InitialExpression>
-</Property>
-
-<Method name="OnTask">
-<Description>
-query the existing tasks look for tasks which are running and passed
-the next run time.  If problems occur send email to notify.</Description>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// query the existing tasks look for tasks which are running and passed
+/// the next run time.  If problems occur send email to notify.
+Method OnTask() As %Status
+{
 	#dim task as %SYS.Task
 	#define crlf $c(13,10)
 	Set tOK=1,tMessage=""
@@ -61,13 +46,10 @@ the next run time.  If problems occur send email to notify.</Description>
 	#; If Status is an error the task will stop running.  If the EmailOnError is set up the user will be
 	#; notified of the problem
 	Quit Status
-]]></Implementation>
-</Method>
+}
 
-<Method name="SendMail">
-<FormalSpec>pMessage:%String</FormalSpec>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+Method SendMail(pMessage As %String) As %Status
+{
 	set s=##class(%Net.SMTP).%New()
 	set s.smtpserver="[yourmailserver]"
 	set s.timezone="-0400"
@@ -82,15 +64,11 @@ the next run time.  If problems occur send email to notify.</Description>
  	if $$$ISERR(status)  Set (m,s)="" Quit status
  	Set m="",s=""
  	quit $$$OK
-]]></Implementation>
-</Method>
+}
 
-<Method name="ScheduleOnceDaily">
-<Description>
-Example showing schedule with saving custom property values (Notify, NotifyOnOK)</Description>
-<ClassMethod>1</ClassMethod>
-<ReturnType>%Status</ReturnType>
-<Implementation><![CDATA[
+/// Example showing schedule with saving custom property values (Notify, NotifyOnOK)
+ClassMethod ScheduleOnceDaily() As %Status
+{
 	#dim task as %SYS.Task
 	Set task=##Class(%SYS.Task).%New()
 	Set task.Name=..%ClassName(1)
@@ -109,7 +87,6 @@ Example showing schedule with saving custom property values (Notify, NotifyOnOK)
        Do task.AssignSettings(taskDef)
 
 	Quit task.%Save()
-]]></Implementation>
-</Method>
-</Class>
-</Export>
+}
+
+}

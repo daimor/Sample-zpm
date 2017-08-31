@@ -13,6 +13,8 @@
       <Attribute Name="Url">/csp/{$namespace}/sample</Attribute>
     </Resource>
     <Resource Name="Sample.PKG">
+      <Attribute Name="Directory">source/server/cls</Attribute>
+      <Attribute Name="FilenameExtension">cls</Attribute>
     </Resource>
     <Resource Name="EmployeePictures.GBL">
     </Resource>
